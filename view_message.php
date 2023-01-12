@@ -1,0 +1,129 @@
+<?php 
+session_start();
+
+include('connect.php'); 
+
+if(!isset($_SESSION['login_id']))
+{
+  header("location: admin.php");  
+}
+
+$id=$_SESSION['login_id'];
+$t_query=mysqli_query($con,"SELECT * FROM tbl_teacher WHERE login_id='$id'");
+$row=mysqli_fetch_assoc($t_query);
+$teacher_id=$row['teacher_id'];
+mysqli_query($con,"UPDATE tbl_message SET status=1 WHERE teacher_id='$teacher_id'");
+
+$query_ret = mysqli_query($con, "SELECT * FROM tbl_message JOIN tbl_parent ON tbl_message.parent_id=tbl_parent.parent_id JOIN tbl_student ON tbl_parent.student_id=tbl_student.student_id WHERE tbl_message.teacher_id='$teacher_id' AND status=1");
+
+?>
+
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <title>Subject An Education Category Flat Bootstrap Responsive website Template | Home :: w3layouts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="keywords" content="Subject Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+	SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        
+    </script>
+    <!-- Custom Theme files -->
+    <link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="all">
+	<!-- Testimonials-Css -->
+	<link rel="stylesheet" href="css/owl.theme.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/owl.carousel.css" type="text/css" media="screen" property="" />
+    <!-- font-awesome icons -->
+    <link href="css/fontawesome-all.min.css" rel="stylesheet">
+	<!-- //Custom Theme files -->
+    <!-- online-fonts -->
+	<link href="//fonts.googleapis.com/css?family=Roboto:100i,400,500,700" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" rel="stylesheet">
+	<!-- //online-fonts -->
+</head>
+
+<body>
+    <!-- banner -->
+    <div class="banner1">
+        <!-- header -->
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-gradient-secondary pt-3">
+               <h1><a class="navbar-brand" href="index.php">WELCOME TO OUR COLLEGE
+							<span>Sree Vivekananda Arts & Science College</span>
+						</a></h1>
+
+                <button class="navbar-toggler ml-md-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+								<li class="nav-item active">
+									<a class="nav-link" href="teacher.php">Home
+										<span class="sr-only">(current)</span>
+									</a>
+								</li>
+								
+					</ul>
+				</div>
+			</nav>
+        </header>
+
+
+
+
+
+<h1 align="center"><</h1></br></br>
+<section class="content">
+      <div class="container-fluid">
+
+        <div class="card">
+            
+            <!-- /.card-header -->
+            <div class="card-body">
+<table id="category_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th style="text-align: center;">Sl No</th>
+                  <th style="text-align: center;">Parent Name</th>
+                  <th style="text-align: center;">Student Name</th>
+                  <th style="text-align: center;">Message</th>
+                  <th style="text-align: center;">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <?php $i = 0; while($data = mysqli_fetch_assoc($query_ret))
+                {
+                  $i++;
+                ?>
+                <tr>
+                  <td align="center"><?php echo $i; ?></td>
+                  <td align="center"><?php echo $data['p_name']; ?></td>
+                  <td align="center"><?php echo $data['stud_name']; ?></td>
+                  <td align="center"><?php echo $data['message']; ?></td>
+                  <td align="center"><a href="rply_msg.php?msg_id=<?php echo $data['msg_id']; ?>&parent_id=<?php echo $data['parent_id']; ?>&t_id=<?php echo $data['teacher_id']; ?>">Reply</a></td>     
+                 
+                                  
+                </tr>
+                <?php } ?>
+
+              </tbody>
+            </table>
+             </div>
+        </div>
+         
+      </div>
+    </section>
+</body>
+</html>
